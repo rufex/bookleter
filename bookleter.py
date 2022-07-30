@@ -1,9 +1,25 @@
+import argparse
 from PyPDF2 import PdfFileReader, PdfFileWriter, PageObject
 from pathlib import Path
 from collections import deque
 
-folder = Path(__file__).parent
-output = folder.joinpath('output.pdf')
+parser = argparse.ArgumentParser()
+parser.add_argument('file', type=str, help='Provide the name or path to your original PDF file.')
+args = parser.parse_args()
+
+input_file =  Path(args.file)
+input_suffix = input_file.suffix
+
+if not input_file.is_file():
+    raise Exception('File was not found. Check the name or path provided.')
+
+if input_suffix.lower() != '.pdf':
+    raise Exception('Your input file should be a have a pdf extension.')
+
+folder = input_file.parent
+input_name = input_file.stem
+output_name = F"{input_name}_booklet{input_suffix}"
+output_file = folder.joinpath(output_name)
 
 
 def reorder_pages(pages_nr: int):
@@ -37,7 +53,7 @@ def reorder_pages(pages_nr: int):
 
 def main():
     pdf_writer = PdfFileWriter()
-    pdf_reader = PdfFileReader('input.pdf')
+    pdf_reader = PdfFileReader(input_file)
 
     pages_amount = pdf_reader.getNumPages()
     print('Number of Pages (Original File):',pages_amount)
@@ -74,7 +90,7 @@ def main():
 
     print('Number of Pages (Export File):',page_count)
 
-    with open(output, 'wb') as F:
+    with open(output_file, 'wb') as F:
         pdf_writer.write(F)
         print('Done. PDF generated')
 
