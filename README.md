@@ -18,4 +18,12 @@ This is script will also check that the amount of pages in your original PDF has
 
 ## Setup
 
+Clone the repository and install the dependencies using either `requirements.txt` or creating a virtual environment with `pipenv`.
 ## How to use it
+
+```python
+python bookleter.py <file>
+```
+
+Where file should be your input PDF file. It can be a full path to it, or just the name if the file is located in the same folder.
+Your generated PDF will be stored nexty to your original file, with the label "_booklet" added to it's name.
